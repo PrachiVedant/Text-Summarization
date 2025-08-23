@@ -1,7 +1,8 @@
 from Text_Summarization.constants import *
 from Text_Summarization.utils.common import read_yaml, create_dictionaries
 from Text_Summarization.entity import (DataIngestionConfig,
-                                       DataValidationConfig)
+                                       DataValidationConfig,
+                                       DataTransformationConfig)
 
 from pathlib import Path
 CONFIG_FILE_PATH = Path("config/config.yaml")
@@ -45,3 +46,16 @@ class ConfigurationManager:
             ALL_REQUIRED_FILES=self.config.data_validation.ALL_REQUIRED_FILES
         )
         return data_validation_config
+    
+    
+    def get_transformation_config(self) -> DataTransformationConfig:
+        config = self.config.data_transformation
+
+        create_dictionaries([config.root_dir], verbose=True)
+        
+        data_transformation_config =  DataTransformationConfig(
+            root_dir=Path(self.config.data_transformation.root_dir),
+            data_path=Path(self.config.data_transformation.data_path),
+            tokenizer=self.config.data_transformation.tokenizer
+        )
+        return data_transformation_config

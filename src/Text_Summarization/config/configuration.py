@@ -1,6 +1,7 @@
 from Text_Summarization.constants import *
 from Text_Summarization.utils.common import read_yaml, create_dictionaries
-from Text_Summarization.entity import (DataIngestionConfig)
+from Text_Summarization.entity import (DataIngestionConfig,
+                                       DataValidationConfig)
 
 from pathlib import Path
 CONFIG_FILE_PATH = Path("config/config.yaml")
@@ -29,3 +30,18 @@ class ConfigurationManager:
         )
 
         return data_ingestion_config
+    
+
+
+
+    def get_validation_config(self) -> DataValidationConfig:
+        config = self.config.data_validation
+
+        create_dictionaries([config.root_dir],verbose=True)
+
+        data_validation_config = DataValidationConfig(
+            root_dir=Path(self.config.data_validation.root_dir),
+            STATUS_FILE=Path(self.config.data_validation.STATUS_FILE),
+            ALL_REQUIRED_FILES=self.config.data_validation.ALL_REQUIRED_FILES
+        )
+        return data_validation_config
